@@ -70,14 +70,19 @@ class StartMenu:
         screen.blit(self.title, self.title_rect)
         screen.blit(self.start_text, self.start_rect)
 
-    def handle_input(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                return GRID_GAME
+    def handle_input(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return GRID_GAME
         return START_MENU
 
 class CombatScreen:
     def __init__(self):
+        pygame.font.init()
         self.font = pygame.font.Font(None, 36)
         self.text = self.font.render("You are now in combat!", True, WHITE)
         self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -86,10 +91,14 @@ class CombatScreen:
         screen.fill(BLACK)
         screen.blit(self.text, self.text_rect)
 
-    def handle_input(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                return True
+    def handle_input(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return True
         return False
 
 class GridGame:
@@ -102,8 +111,8 @@ class GridGame:
         self.exit = self.generate_valid_exit()
         self.player_moved = False
         self.exits_reached = 0
-        self.gamestate = START_MENU
         self.combat_screen = CombatScreen()
+        self.gamestate = START_MENU
 
     def draw_grid(self, screen):
         for y in range(self.height):
@@ -130,21 +139,26 @@ class GridGame:
         self.exits_reached = 0  # Reset the exits reached count
         self.gamestate = START_MENU
 
-    def handle_input(self, event):
-        if self.gamestate == GRID_GAME:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    self.try_move_player(0, -1)  # Move up
-                elif event.key == pygame.K_s:
-                    self.try_move_player(0, 1)   # Move down
-                elif event.key == pygame.K_a:
-                    self.try_move_player(-1, 0)  # Move left
-                elif event.key == pygame.K_d:
-                    self.try_move_player(1, 0)   # Move right
-                elif event.key == pygame.K_q:
-                    self.return_to_menu()        # return to menu
-        elif self.gamestate == COMBAT_SCREEN:
-            self.combat_screen.handle_input(event)
+    def handle_input(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if self.gamestate == GRID_GAME:
+                    if event.key == pygame.K_w:
+                        self.try_move_player(0, -1)  # Move up
+                    elif event.key == pygame.K_s:
+                        self.try_move_player(0, 1)   # Move down
+                    elif event.key == pygame.K_a:
+                        self.try_move_player(-1, 0)  # Move left
+                    elif event.key == pygame.K_d:
+                        self.try_move_player(1, 0)   # Move right
+                    elif event.key == pygame.K_q:
+                        self.return_to_menu()        # return to menu
+                elif self.gamestate == COMBAT_SCREEN:
+                    if event.key == pygame.K_SPACE:
+                        self.gamestate = GRID_GAME
 
     def try_move_player(self, dx, dy):
         new_x = self.player.x + dx
@@ -203,51 +217,76 @@ class GridGame:
             self.gamestate = COMBAT_SCREEN
             break  # Exit loop after finding the first enemy
 
-class Game:
-    def __init__(self):
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.clock = pygame.time.Clock()
-        self.current_page = StartMenu()
-        self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT)
+    def run(self):
+        pygame.init()
+        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        clock = pygame.time.Clock()
 
-    def handle_input(self, event):
-        if self.grid_game.gamestate == START_MENU:
-            self.grid_game.gamestate = self.current_page.handle_input(event)
-        elif self.grid_game.gamestate == GRID_GAME:
-            self.grid_game.handle_input(event)
-        elif self.grid_game.gamestate == COMBAT_SCREEN:
-            if self.grid_game.combat_screen.handle_input(event):
-                self.grid_game.gamestate = GRID_GAME
+        menu = StartMenu()
 
-    def update(self):
-        self.grid_game.check_enemy_collision()
+        while True:
+            if self.gamestate == GRID_GAME:
+                self.handle_input()
+                self.check_enemy_collision()
+                screen.fill(BLACK)
+                self.draw_grid(screen)
+                self.draw_enemies(screen)
+                self.draw_player(screen)
+                pygame.display.flip()
+                clock.tick(10)
+            # Combat screen state
+            # elif self.gamestate == COMBAT_SCREEN:
+            #     for event in pygame.event.get():
+            #         if event.type == pygame.QUIT:
+            #             pygame.quit()
+            #             sys.exit()
+            #     self.combat_screen.draw(screen)
+            #     pygame.display.flip()
+            #     if self.combat_screen.handle_input():
+            #         self.gamestate = GRID_GAME
 
-    def render(self):
-        self.screen.fill(BLACK)
-        if self.grid_game.gamestate == START_MENU:
-            self.current_page.draw(self.screen)
-        elif self.grid_game.gamestate == GRID_GAME:
-            self.grid_game.draw_grid(self.screen)
-            self.grid_game.draw_enemies(self.screen)
-            self.grid_game.draw_player(self.screen)
-        elif self.grid_game.gamestate == COMBAT_SCREEN:
-            self.grid_game.combat_screen.draw(self.screen)
-        pygame.display.flip()
+
+class GameManager:
+    def __init__(self, width, height):
+        self.gamestate = START_MENU
+        self.grid_game = GRID_GAME
+        self.combat_screen = COMBAT_SCREEN
+        self.menu = START_MENU
+        self.width = width
+        self.height = height
 
     def run(self):
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                self.handle_input(event)
-            self.update()
-            self.render()
-            self.clock.tick(10)
-        pygame.quit()
-        sys.exit()
+        pygame.init()
+        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        clock = pygame.time.Clock()
+
+        menu = StartMenu()
+
+        while True:
+            # Start Menu State
+            if self.gamestate == START_MENU:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                menu.draw(screen)
+                pygame.display.flip()
+                if menu.handle_input() == GRID_GAME:
+                    self.gamestate = GRID_GAME
+            # Grid State
+            elif self.gamestate == GRID_GAME:
+                self.grid_game()
+            # Combat screen state
+            elif self.gamestate == COMBAT_SCREEN:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                self.combat_screen.draw(screen)
+                pygame.display.flip()
+                if self.combat_screen.handle_input():
+                    self.gamestate = GRID_GAME
 
 if __name__ == "__main__":
-    pygame.init()
-    game = Game()
+    game = GameManager(GRID_WIDTH, GRID_HEIGHT)
     game.run()

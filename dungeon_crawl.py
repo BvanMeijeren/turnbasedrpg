@@ -1,96 +1,14 @@
 import pygame
-import sys
+#import sys
 import random
 
-# Define colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-BROWN = (139, 69, 19)
-GREEN = (0, 255, 0)
-
-# Set up grid parameters
-GRID_SIZE = 50
-GRID_WIDTH = 10
-GRID_HEIGHT = 10
-
-# Set up screen dimensions
-SCREEN_WIDTH = GRID_SIZE * GRID_WIDTH
-SCREEN_HEIGHT = GRID_SIZE * GRID_HEIGHT + 40
-
-# Game states
-START_MENU = 0
-GRID_GAME = 1
-COMBAT_SCREEN = 2
-
-class Player:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
-
-class Enemy:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def move(self, player_x, player_y):
-        if self.x < player_x:
-            self.x += 1
-        elif self.x > player_x:
-            self.x -= 1
-        if self.y < player_y:
-            self.y += 1
-        elif self.y > player_y:
-            self.y -= 1
-
-class Obstacle:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-class Exit:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-class StartMenu:
-    def __init__(self):
-        self.font = pygame.font.Font(None, 36)
-        self.title = self.font.render("Grid Game", True, WHITE)
-        self.title_rect = self.title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
-        self.start_text = self.font.render("Press Space to Start", True, WHITE)
-        self.start_rect = self.start_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-
-    def draw(self, screen):
-        screen.blit(self.title, self.title_rect)
-        screen.blit(self.start_text, self.start_rect)
-
-    def handle_input(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                return GRID_GAME
-        return START_MENU
-
-class CombatScreen:
-    def __init__(self):
-        self.font = pygame.font.Font(None, 36)
-        self.text = self.font.render("You are now in combat!", True, WHITE)
-        self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-
-    def draw(self, screen):
-        screen.fill(BLACK)
-        screen.blit(self.text, self.text_rect)
-
-    def handle_input(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                return True
-        return False
+from player import Player
+from enemy import Enemy 
+from obstacle import Obstacle
+from exit import Exit
+#from start_menu import StartMenu
+from combat import CombatScreen
+from constants import *
 
 class GridGame:
     def __init__(self, width, height):
@@ -202,52 +120,3 @@ class GridGame:
             self.enemies.remove(enemy)
             self.gamestate = COMBAT_SCREEN
             break  # Exit loop after finding the first enemy
-
-class Game:
-    def __init__(self):
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.clock = pygame.time.Clock()
-        self.current_page = StartMenu()
-        self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT)
-
-    def handle_input(self, event):
-        if self.grid_game.gamestate == START_MENU:
-            self.grid_game.gamestate = self.current_page.handle_input(event)
-        elif self.grid_game.gamestate == GRID_GAME:
-            self.grid_game.handle_input(event)
-        elif self.grid_game.gamestate == COMBAT_SCREEN:
-            if self.grid_game.combat_screen.handle_input(event):
-                self.grid_game.gamestate = GRID_GAME
-
-    def update(self):
-        self.grid_game.check_enemy_collision()
-
-    def render(self):
-        self.screen.fill(BLACK)
-        if self.grid_game.gamestate == START_MENU:
-            self.current_page.draw(self.screen)
-        elif self.grid_game.gamestate == GRID_GAME:
-            self.grid_game.draw_grid(self.screen)
-            self.grid_game.draw_enemies(self.screen)
-            self.grid_game.draw_player(self.screen)
-        elif self.grid_game.gamestate == COMBAT_SCREEN:
-            self.grid_game.combat_screen.draw(self.screen)
-        pygame.display.flip()
-
-    def run(self):
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                self.handle_input(event)
-            self.update()
-            self.render()
-            self.clock.tick(10)
-        pygame.quit()
-        sys.exit()
-
-if __name__ == "__main__":
-    pygame.init()
-    game = Game()
-    game.run()
