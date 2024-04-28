@@ -15,23 +15,27 @@ class GameManager:
         self.combat_screen = CombatScreen()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.gamestate= START_MENU
+        self.gamestate= START_MENU # initial gamestate
 
     ### Global Input handler function ###
     def handle_input(self, event):
         if self.gamestate == START_MENU:
+            print("Input handler: start menu")
             self.gamestate = self.start_menu.handle_input(event)
         elif self.gamestate == GRID_GAME:
+            print("Input handler: dungeon crawl")
             self.gamestate = self.grid_game.handle_input(event)
         elif self.gamestate == COMBAT_SCREEN:
+            print("Input handler: combat")
             self.gamestate = self.combat_screen.handle_input(event)
 
-    def update(self):
-        if self.grid_game:
-            has_colliding_enemies = self.grid_game.check_enemy_collision()
-            print(str(has_colliding_enemies))
-            if has_colliding_enemies:
-                self.gamestate = COMBAT_SCREEN
+    # def update(self):
+    #     if self.grid_game:
+    #         has_colliding_enemies = self.grid_game.check_enemy_collision()
+    #         #print(str(has_colliding_enemies))
+    #         if has_colliding_enemies:
+    #             print("True")
+    #             self.gamestate = COMBAT_SCREEN
 
     def render(self):
         self.screen.fill(BLACK)
@@ -50,7 +54,7 @@ class GameManager:
                 if event.type == pygame.QUIT:
                     running = False
                 self.handle_input(event)  # Pass event to handle_input
-            self.update()
+            #self.update()
             self.render()
             self.clock.tick(10)
         pygame.quit()

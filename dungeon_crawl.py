@@ -48,6 +48,7 @@ class GridGame:
 
     ### input handler ###
     def handle_input(self, event):
+        gamestate = GRID_GAME
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 self.try_move_player(0, -1)  # Move up
@@ -59,11 +60,14 @@ class GridGame:
                 self.try_move_player(1, 0)   # Move right
             elif event.key == pygame.K_q:
                 print("pressed Q")
-                return START_MENU            # return to menu
-        return GRID_GAME
+                gamestate = START_MENU       # return to menu
+        
+        if self.check_enemy_collision() > 0:
+            gamestate = COMBAT_SCREEN
+        
+        return gamestate
 
     ### placement & movement functions ###
-    # while moving player, a bunch of functions are executed
     def try_move_player(self, dx, dy):
         new_x = self.player.x + dx
         new_y = self.player.y + dy
@@ -71,7 +75,6 @@ class GridGame:
             self.player.move(dx, dy)
             self.move_enemies()             # move enemies
             self.check_exit()               # check and validate exit position
-            self.check_enemy_collision() # check enemy collision and react
             self.player_moved = True
 
     def move_enemies(self):
@@ -118,21 +121,16 @@ class GridGame:
             if enemy.x == self.player.x and enemy.y == self.player.y:
                 enemies_to_remove.append(enemy)     # add colliding enemy to remove list
 
+        # count nr of colliding enemies
         nr_colliding_enemies = len(enemies_to_remove)
-        
+        print(nr_colliding_enemies)
+
         # remove all colliding enemies
         for enemy in enemies_to_remove:
             self.enemies.remove(enemy)
 
-        # if colliding enemies are found, return True else False
-        if nr_colliding_enemies > 0:
-            return True
-        else:
-            return False
+        return nr_colliding_enemies
 
-
-
-    ### run ###
     def run(self):
         self.draw_grid(self.screen)
         self.draw_enemies(self.screen)

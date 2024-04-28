@@ -12,18 +12,20 @@ class CombatScreen:
         self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    def draw(self, screen):
+    def draw_text(self, screen):
         screen.fill(BLACK)
         screen.blit(self.text, self.text_rect)
 
     def handle_input(self, event):
+        gamestate = COMBAT_SCREEN
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                gamestate = GRID_GAME
                 # return to grid game TO DO
-                self.try_move_player(0, -1)  # Move up
+                #self.try_move_player(0, -1)  # Move up
             elif event.key == pygame.K_q:
-                return START_MENU
-        return COMBAT_SCREEN
+                gamestate = START_MENU
+        return gamestate
 
     def run(self):
-        self.draw(self.screen)
+        self.draw_text(self.screen)
