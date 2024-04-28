@@ -6,6 +6,7 @@ from start_menu import StartMenu
 from dungeon_crawl import GridGame
 from combat import CombatScreen
 from constants import *
+from player import *
 
 class GameManager:
     def __init__(self):
@@ -13,6 +14,7 @@ class GameManager:
         self.start_menu = StartMenu()
         self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT)
         self.combat_screen = CombatScreen()
+        self.player = Player(x=0,y=0)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.gamestate= START_MENU # initial gamestate

@@ -2,11 +2,12 @@
 import pygame
 import random
 
-from player import Player
+#from player import Player
 from enemy import Enemy 
 from obstacle import Obstacle
 from exit import Exit
 from constants import *
+from player import Player
 
 class GridGame:
     def __init__(self, grid_width, grid_height):
@@ -58,7 +59,7 @@ class GridGame:
                 self.try_move_player(-1, 0)  # Move left
             elif event.key == pygame.K_d:
                 self.try_move_player(1, 0)   # Move right
-            elif event.key == pygame.K_q:
+            elif event.key == pygame.K_ESCAPE:
                 print("pressed Q")
                 gamestate = START_MENU       # return to menu
         
