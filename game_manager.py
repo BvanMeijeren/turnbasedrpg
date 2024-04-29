@@ -6,14 +6,31 @@ from start_menu import StartMenu
 from dungeon_crawl import GridGame
 from combat import CombatScreen
 from constants import *
-from player import *
+from characters import Character
 
 class GameManager:
     def __init__(self):
         pygame.init()
-        self.player = Player(x=0,y=0)
+        self.player = Character(x=0, 
+                                y=0, 
+                                name="Bas", 
+                                id=1, 
+                                level=1, 
+                                xp=0,
+                                hitpoints=50, 
+                                critical_chance=0.05, 
+                                critical_multiplier=1.5,
+                                species="Human", 
+                                fire_def=100,
+                                ice_def=100,
+                                electricity_def=100,
+                                skills=None, 
+                                items=None,
+                                equipped_weapon=None,
+                                profession="Warrior"
+                                )
         self.start_menu = StartMenu()
-        self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT)
+        self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT, self.player)
         self.combat_screen = CombatScreen()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
@@ -22,13 +39,13 @@ class GameManager:
     ### Global Input handler function ###
     def handle_input(self, event):
         if self.gamestate == START_MENU:
-            print("Input handler: start menu")
+            #print("Input handler: start menu")
             self.gamestate = self.start_menu.handle_input(event)
         elif self.gamestate == GRID_GAME:
-            print("Input handler: dungeon crawl")
+            #print("Input handler: dungeon crawl")
             self.gamestate = self.grid_game.handle_input(event)
         elif self.gamestate == COMBAT_SCREEN:
-            print("Input handler: combat")
+            #print("Input handler: combat")
             self.gamestate = self.combat_screen.handle_input(event)
 
     ### Global Render function, determines page visibility ###

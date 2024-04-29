@@ -3,8 +3,6 @@ import sys
 import random
 from constants import *
 from enemy import *
-from player import Player
-from graphics import skeleton
 
 class CombatScreen:
     def __init__(self):
@@ -14,7 +12,25 @@ class CombatScreen:
         # UI elements
         self.text = self.font.render("You are now in combat!", True, WHITE)
         self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        self.enemy_visual = self.font.render(skeleton, True, WHITE)
+
+        # Load images
+        character_image = pygame.image.load("graphics/character.png").convert_alpha()
+        pokemon_image = pygame.image.load("graphics/goblin.png").convert_alpha()
+
+        # Create sprite groups
+        all_sprites = pygame.sprite.Group()
+        characters = pygame.sprite.Group()
+        enemies = pygame.sprite.Group()
+
+        # Create character and Pokémon sprites
+        # character = Character(character_image, 100, 450)
+        # enemy = Character(pokemon_image, 600, 450)
+
+
+        # # Add sprites to sprite groups
+        # characters.add(character)
+        # characters.add(enemy)
+        # all_sprites.add(character, enemy)
 
     def draw_text(self, screen):
         screen.fill(BLACK)

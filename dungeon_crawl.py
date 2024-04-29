@@ -7,13 +7,13 @@ from enemy import Enemy
 from obstacle import Obstacle
 from exit import Exit
 from constants import *
-from player import Player
+from characters import Character
 
 class GridGame:
-    def __init__(self, grid_width, grid_height):
+    def __init__(self, grid_width, grid_height, player):
         self.grid_width = grid_width
         self.grid_height = grid_height
-        self.player = Player(0, 0)
+        self.player = player
         self.enemies = [Enemy(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(3)]
         self.obstacles = [Obstacle(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(10)]
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -26,6 +26,8 @@ class GridGame:
         self.enemy_image = pygame.transform.scale(self.enemy_image, (GRID_SIZE, GRID_SIZE))
 
         # Load player image
+        self.player_image = self.player.image
+        self.player_image = pygame.transform.scale(self.player_image, (GRID_SIZE, GRID_SIZE))
 
     #### Grid game drawing function ####
     def draw_grid(self, screen):
@@ -41,8 +43,12 @@ class GridGame:
             pygame.draw.rect(screen, GREEN, exit_rect)
 
     def draw_player(self, screen):
-        player_rect = pygame.Rect(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-        pygame.draw.rect(screen, RED, player_rect)
+        # player_rect = pygame.Rect(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+        # pygame.draw.rect(screen, RED, player_rect)
+        # Calculate the position to blit the enemy image
+        player_rect = self.player_image.get_rect(topleft=(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE))
+        # Blit the enemy image onto the screen
+        screen.blit(self.player_image, player_rect)
 
     def draw_enemies(self, screen):
         for enemy in self.enemies:
@@ -117,7 +123,6 @@ class GridGame:
     def check_exit(self):
         if self.player.x == self.exit.x and self.player.y == self.exit.y:
             self.exits_reached += 1
-            self.player = Player(0, 0)
             self.enemies = [Enemy(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(3)]
             self.obstacles = [Obstacle(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(10)]
             self.exit = self.generate_valid_exit()
