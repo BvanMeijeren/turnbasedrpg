@@ -17,3 +17,5 @@ class Character:
         self.items = items
         self.equipped_weapon = equipped_weapon
         self.profession = profession
+
+        
