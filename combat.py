@@ -4,15 +4,17 @@ import random
 from constants import *
 from enemy import *
 from player import Player
-
+from graphics import skeleton
 
 class CombatScreen:
     def __init__(self):
         self.font = pygame.font.Font(None, 36)
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        # UI elements
         self.text = self.font.render("You are now in combat!", True, WHITE)
         self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.player = Player
+        self.enemy_visual = self.font.render(skeleton, True, WHITE)
 
     def draw_text(self, screen):
         screen.fill(BLACK)

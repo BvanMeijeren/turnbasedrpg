@@ -1,3 +1,11 @@
+import pygame
+
+# Initialize pygame
+pygame.init()
+
+# Get the display size
+DISPLAY_SIZE = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+
 # Define colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -12,8 +20,8 @@ GRID_WIDTH = 10
 GRID_HEIGHT = 10
 
 # Set up screen dimensions
-SCREEN_WIDTH = GRID_SIZE * GRID_WIDTH
-SCREEN_HEIGHT = GRID_SIZE * GRID_HEIGHT + 40
+SCREEN_WIDTH = DISPLAY_SIZE[0]
+SCREEN_HEIGHT = DISPLAY_SIZE[1]
 
 # Game states
 START_MENU = 0

@@ -21,6 +21,12 @@ class GridGame:
         self.player_moved = False
         self.exits_reached = 0
 
+        # Load the enemy image
+        self.enemy_image = pygame.image.load("graphics/goblin.png")
+        self.enemy_image = pygame.transform.scale(self.enemy_image, (GRID_SIZE, GRID_SIZE))
+
+        # Load player image
+
     #### Grid game drawing function ####
     def draw_grid(self, screen):
         for y in range(self.grid_height):
@@ -40,8 +46,10 @@ class GridGame:
 
     def draw_enemies(self, screen):
         for enemy in self.enemies:
-            enemy_rect = pygame.Rect(enemy.x * GRID_SIZE, enemy.y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-            pygame.draw.rect(screen, BLUE, enemy_rect)
+            # Calculate the position to blit the enemy image
+            enemy_rect = self.enemy_image.get_rect(topleft=(enemy.x * GRID_SIZE, enemy.y * GRID_SIZE))
+            # Blit the enemy image onto the screen
+            screen.blit(self.enemy_image, enemy_rect)
 
     ### quite to menu ###
     def return_to_menu(self):

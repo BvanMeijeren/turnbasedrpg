@@ -11,10 +11,10 @@ from player import *
 class GameManager:
     def __init__(self):
         pygame.init()
+        self.player = Player(x=0,y=0)
         self.start_menu = StartMenu()
         self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT)
         self.combat_screen = CombatScreen()
-        self.player = Player(x=0,y=0)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.gamestate= START_MENU # initial gamestate
@@ -31,14 +31,7 @@ class GameManager:
             print("Input handler: combat")
             self.gamestate = self.combat_screen.handle_input(event)
 
-    # def update(self):
-    #     if self.grid_game:
-    #         has_colliding_enemies = self.grid_game.check_enemy_collision()
-    #         #print(str(has_colliding_enemies))
-    #         if has_colliding_enemies:
-    #             print("True")
-    #             self.gamestate = COMBAT_SCREEN
-
+    ### Global Render function, determines page visibility ###
     def render(self):
         self.screen.fill(BLACK)
         if self.gamestate == START_MENU:
@@ -49,6 +42,7 @@ class GameManager:
             self.combat_screen.run()
         pygame.display.flip()
 
+    ### Core run function ###
     def run(self):
         running = True
         while running:
@@ -56,7 +50,6 @@ class GameManager:
                 if event.type == pygame.QUIT:
                     running = False
                 self.handle_input(event)  # Pass event to handle_input
-            #self.update()
             self.render()
             self.clock.tick(10)
         pygame.quit()
