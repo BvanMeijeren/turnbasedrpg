@@ -5,12 +5,15 @@ import sys
 from start_menu import StartMenu
 from dungeon_crawl import GridGame
 from combat import CombatScreen
+from character_creation import CharacterCreation
 from constants import *
 from characters import Character
 
 class GameManager:
     def __init__(self):
         pygame.init()
+
+        # default player settings until player creation menu
         self.player = Character(x=0, 
                                 y=0, 
                                 name="Bas", 
@@ -30,6 +33,7 @@ class GameManager:
                                 profession="Warrior"
                                 )
         self.start_menu = StartMenu()
+        self.character_creation = CharacterCreation()
         self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT, self.player)
         self.combat_screen = CombatScreen()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -41,6 +45,9 @@ class GameManager:
         if self.gamestate == START_MENU:
             #print("Input handler: start menu")
             self.gamestate = self.start_menu.handle_input(event)
+        elif self.gamestate == CHARACTER_CREATION:
+            #print("Input handler: character creation")
+            self.gamestate = self.character_creation.handle_input(event)
         elif self.gamestate == GRID_GAME:
             #print("Input handler: dungeon crawl")
             self.gamestate = self.grid_game.handle_input(event)
@@ -49,10 +56,13 @@ class GameManager:
             self.gamestate = self.combat_screen.handle_input(event)
 
     ### Global Render function, determines page visibility ###
-    def render(self):
+    def gamestate_coordinator(self):
         self.screen.fill(BLACK)
         if self.gamestate == START_MENU:
             self.start_menu.draw(self.screen)
+        elif self.gamestate == CHARACTER_CREATION:
+            print("render character creation")
+            self.player = self.character_creation.run(self.screen)
         elif self.gamestate == GRID_GAME:
             self.grid_game.run()
         elif self.gamestate == COMBAT_SCREEN:
@@ -67,7 +77,7 @@ class GameManager:
                 if event.type == pygame.QUIT:
                     running = False
                 self.handle_input(event)  # Pass event to handle_input
-            self.render()
+            self.gamestate_coordinator()
             self.clock.tick(10)
         pygame.quit()
         sys.exit()

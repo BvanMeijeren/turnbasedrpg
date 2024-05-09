@@ -22,7 +22,7 @@ class Character(pygame.sprite.Sprite):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
+        self.rect.bottomleft = (x, y)
 
 class Pokemon(pygame.sprite.Sprite):
     def __init__(self, image, x, y):
@@ -70,12 +70,12 @@ def main():
     pokemons = pygame.sprite.Group()
 
     # Create character and Pokémon sprites
-    character = Character(character_image, 100, 450)
-    pokemon = Pokemon(pokemon_image, 600, 450)
+    character = Character(character_image, SCREEN_WIDTH * 0.25, SCREEN_HEIGHT * 0.75)
+    pokemon = Pokemon(pokemon_image, SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.25)
 
     # Create HP bars
-    character_hp_bar = HPBar(100, 50, 50)
-    pokemon_hp_bar = HPBar(200, 550, 50)
+    character_hp_bar = HPBar(100, SCREEN_WIDTH * 0.25, SCREEN_HEIGHT * 0.75)
+    pokemon_hp_bar = HPBar(200, SCREEN_WIDTH * 0.80, SCREEN_HEIGHT * 0.25)
 
     # Add sprites to sprite groups
     characters.add(character)

@@ -22,15 +22,6 @@ class CombatScreen:
         characters = pygame.sprite.Group()
         enemies = pygame.sprite.Group()
 
-        # Create character and Pokémon sprites
-        # character = Character(character_image, 100, 450)
-        # enemy = Character(pokemon_image, 600, 450)
-
-
-        # # Add sprites to sprite groups
-        # characters.add(character)
-        # characters.add(enemy)
-        # all_sprites.add(character, enemy)
 
     def draw_text(self, screen):
         screen.fill(BLACK)
@@ -43,7 +34,7 @@ class CombatScreen:
                 gamestate = GRID_GAME
             # if event.key == pygame.K_1:
             #     se
-            elif event.key == pygame.K_q:
+            elif event.key == pygame.K_ESCAPE:
                 gamestate = START_MENU
         return gamestate
 

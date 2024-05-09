@@ -43,8 +43,6 @@ class GridGame:
             pygame.draw.rect(screen, GREEN, exit_rect)
 
     def draw_player(self, screen):
-        # player_rect = pygame.Rect(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-        # pygame.draw.rect(screen, RED, player_rect)
         # Calculate the position to blit the enemy image
         player_rect = self.player_image.get_rect(topleft=(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE))
         # Blit the enemy image onto the screen
