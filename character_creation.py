@@ -5,16 +5,23 @@ import random
 from constants import *
 
 class CharacterCreation:
-    def __init__(self):
+    def __init__(self, player):
         pygame.display.set_caption("Character Creation")
         self.font = pygame.font.Font(None, 36)
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.selected_profession = 0
         self.selected_race = 0
+        self.player = player
 
-        self.classes = ["Warrior", "Mage", "Rogue"]
+        self.classes = ["Knight", "Mage", "Rogue"]
         self.races = ["Human", "Elf", "Dwarf"]
 
         self.still_creating_character = True
+
+    def give_player_profession(self, profession):
+        # update player object with chosen profession
+        self.player.profession = self.classes[profession]
+        #print("Chosen profession: " + self.classes[profession])
 
     def handle_input(self, event):
         gamestate = CHARACTER_CREATION
@@ -35,13 +42,13 @@ class CharacterCreation:
                 else:
                     return GRID_GAME
 
-        return gamestate   
+        return gamestate
          
 
 
 
-    def run(self, screen):
-        print("blacken the screen")
+    def render(self, screen):
+        #print("blacken the screen")
         # screen.fill(BLACK)
 
         # Load background image
@@ -49,7 +56,6 @@ class CharacterCreation:
         screen.blit(background_image, (0, 0))
 
         if self.still_creating_character:
-            print("Class selection menu rendering triggered")
             select_text = self.font.render("Select Class:", True, WHITE)
             select_rect = select_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
             screen.blit(select_text, select_rect)
@@ -71,4 +77,9 @@ class CharacterCreation:
                 screen.blit(race_option_text, race_option_rect)
 
         pygame.display.flip()
+
+    def run(self):
+        self.render(self.screen)
+        self.give_player_profession(self.selected_profession)
+
 

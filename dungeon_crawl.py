@@ -26,8 +26,7 @@ class GridGame:
         self.enemy_image = pygame.transform.scale(self.enemy_image, (GRID_SIZE, GRID_SIZE))
 
         # Load player image
-        self.player_image = self.player.image
-        self.player_image = pygame.transform.scale(self.player_image, (GRID_SIZE, GRID_SIZE))
+        self.player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
 
     #### Grid game drawing function ####
     def draw_grid(self, screen):
@@ -43,6 +42,17 @@ class GridGame:
             pygame.draw.rect(screen, GREEN, exit_rect)
 
     def draw_player(self, screen):
+
+        # Update player sprite accroding to selected profession
+        if self.player.profession == 'Knight':
+            self.player_image = pygame.image.load("graphics/knight.png").convert_alpha()
+        elif self.player.profession == 'Mage':
+            self.player_image = pygame.image.load("graphics/wizard.png").convert_alpha()
+        elif self.player.profession == 'Rogue':
+            self.player_image = pygame.image.load("graphics/thief.png").convert_alpha()
+        # scale image
+        self.player_image = pygame.transform.scale(self.player_image, (GRID_SIZE, GRID_SIZE))
+
         # Calculate the position to blit the enemy image
         player_rect = self.player_image.get_rect(topleft=(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE))
         # Blit the enemy image onto the screen
@@ -72,7 +82,6 @@ class GridGame:
             elif event.key == pygame.K_d:
                 self.try_move_player(1, 0)   # Move right
             elif event.key == pygame.K_ESCAPE:
-                print("pressed Q")
                 gamestate = START_MENU       # return to menu
         
         if self.check_enemy_collision() > 0:
@@ -135,7 +144,6 @@ class GridGame:
 
         # count nr of colliding enemies
         nr_colliding_enemies = len(enemies_to_remove)
-        print(nr_colliding_enemies)
 
         # remove all colliding enemies
         for enemy in enemies_to_remove:

@@ -26,7 +26,7 @@ class Character:
         # for rendering
         super().__init__()
         pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.image = pygame.image.load("graphics/wizard.png").convert()
+        self.image = pygame.image.load("graphics/knight.png").convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
 

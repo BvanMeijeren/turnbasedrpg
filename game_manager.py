@@ -30,12 +30,12 @@ class GameManager:
                                 skills=None, 
                                 items=None,
                                 equipped_weapon=None,
-                                profession="Warrior"
+                                profession="Knight"
                                 )
         self.start_menu = StartMenu()
-        self.character_creation = CharacterCreation()
-        self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT, self.player)
-        self.combat_screen = CombatScreen()
+        self.character_creation = CharacterCreation(player = self.player)
+        self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT, player = self.player)
+        self.combat_screen = CombatScreen(player = self.player)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.gamestate= START_MENU # initial gamestate
@@ -61,8 +61,9 @@ class GameManager:
         if self.gamestate == START_MENU:
             self.start_menu.draw(self.screen)
         elif self.gamestate == CHARACTER_CREATION:
-            print("render character creation")
-            self.player = self.character_creation.run(self.screen)
+            #self.player = self.character_creation.run() # try without this first!
+            self.character_creation.run()
+            print("chosen professiong is " + self.player.profession)
         elif self.gamestate == GRID_GAME:
             self.grid_game.run()
         elif self.gamestate == COMBAT_SCREEN:

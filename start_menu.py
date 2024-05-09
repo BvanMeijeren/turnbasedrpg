@@ -15,7 +15,6 @@ class StartMenu:
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:  # Check for keydown event
             if event.key == pygame.K_SPACE:
-                print("you pressed SPACE")
                 return CHARACTER_CREATION  # Return gamestate if spacebar is pressed
             elif event.key == pygame.K_ESCAPE:
                 pygame.quit()
