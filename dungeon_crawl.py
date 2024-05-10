@@ -30,18 +30,22 @@ class GridGame:
 
     #### Grid game drawing function ####
     def draw_grid(self, screen):
+        grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
+        grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
         for y in range(self.grid_height):
             for x in range(self.grid_width):
-                rect = pygame.Rect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+                rect = pygame.Rect(x * GRID_SIZE + grid_offset_x, y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
                 pygame.draw.rect(screen, WHITE, rect, 1)
         for obstacle in self.obstacles:
-            obstacle_rect = pygame.Rect(obstacle.x * GRID_SIZE, obstacle.y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+            obstacle_rect = pygame.Rect(obstacle.x * GRID_SIZE + grid_offset_x, obstacle.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
             pygame.draw.rect(screen, BROWN, obstacle_rect)
         if self.exit:
-            exit_rect = pygame.Rect(self.exit.x * GRID_SIZE, self.exit.y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+            exit_rect = pygame.Rect(self.exit.x * GRID_SIZE + grid_offset_x, self.exit.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
             pygame.draw.rect(screen, GREEN, exit_rect)
 
     def draw_player(self, screen):
+        grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
+        grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
 
         # Update player sprite accroding to selected profession
         if self.player.profession == 'Knight':
@@ -54,14 +58,16 @@ class GridGame:
         self.player_image = pygame.transform.scale(self.player_image, (GRID_SIZE, GRID_SIZE))
 
         # Calculate the position to blit the enemy image
-        player_rect = self.player_image.get_rect(topleft=(self.player.x * GRID_SIZE, self.player.y * GRID_SIZE))
         # Blit the enemy image onto the screen
+        player_rect = self.player_image.get_rect(topleft=(self.player.x * GRID_SIZE + grid_offset_x, self.player.y * GRID_SIZE + grid_offset_y))
         screen.blit(self.player_image, player_rect)
 
     def draw_enemies(self, screen):
+        grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
+        grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
         for enemy in self.enemies:
             # Calculate the position to blit the enemy image
-            enemy_rect = self.enemy_image.get_rect(topleft=(enemy.x * GRID_SIZE, enemy.y * GRID_SIZE))
+            enemy_rect = self.enemy_image.get_rect(topleft=(enemy.x * GRID_SIZE + grid_offset_x, enemy.y * GRID_SIZE + grid_offset_y))
             # Blit the enemy image onto the screen
             screen.blit(self.enemy_image, enemy_rect)
 
