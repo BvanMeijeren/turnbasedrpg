@@ -8,24 +8,20 @@ class CombatScreen:
     def __init__(self,player):
         self.font = pygame.font.Font(None, 36)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.player = player
 
         # UI elements
         self.text = self.font.render("You are now in combat!", True, WHITE)
         self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
 
-        # Load images
-        character_image = player.image
-        pokemon_image = pygame.image.load("graphics/goblin.png").convert_alpha()
-
-        # Create sprite groups
-        all_sprites = pygame.sprite.Group()
-        characters = pygame.sprite.Group()
-        enemies = pygame.sprite.Group()
-
-
     def draw_text(self, screen):
         screen.fill(BLACK)
         screen.blit(self.text, self.text_rect)
+
+        # scale image
+        player_image = pygame.transform.scale(self.player.image, (SCREEN_WIDTH*0.2, SCREEN_WIDTH*0.2))
+        # Load images
+        self.screen.blit(player_image, (0, SCREEN_HEIGHT*0.3))
 
     def handle_input(self, event):
         gamestate = COMBAT_SCREEN

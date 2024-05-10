@@ -21,6 +21,7 @@ class GameManager:
                                 level=1, 
                                 xp=0,
                                 hitpoints=50, 
+                                max_hitpoints=50,
                                 critical_chance=0.05, 
                                 critical_multiplier=1.5,
                                 species="Human", 

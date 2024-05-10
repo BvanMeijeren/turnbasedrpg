@@ -71,6 +71,24 @@ class GridGame:
             # Blit the enemy image onto the screen
             screen.blit(self.enemy_image, enemy_rect)
 
+    def draw_health_bar(self, screen):
+        grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
+        grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
+        health_bar_width = self.grid_width * GRID_SIZE
+        health_bar_height = 20
+        health_bar_rect = pygame.Rect(grid_offset_x, grid_offset_y + self.grid_height * GRID_SIZE + 10, health_bar_width, health_bar_height)
+        
+        # Calculate the width of the health bar based on player's current health
+        current_hp_percentage = max(self.player.hitpoints / self.player.max_hitpoints, 0)
+        fill_width = int(health_bar_width * current_hp_percentage)
+        
+        # Draw the empty health bar
+        pygame.draw.rect(screen, BLACK, health_bar_rect)
+        
+        # Draw the filled portion of the health bar in red
+        fill_rect = pygame.Rect(grid_offset_x, grid_offset_y + self.grid_height * GRID_SIZE + 10, fill_width, health_bar_height)
+        pygame.draw.rect(screen, RED, fill_rect)
+
     ### quite to menu ###
     def return_to_menu(self):
         self.exits_reached = 0  # Reset the exits reached count
@@ -161,3 +179,4 @@ class GridGame:
         self.draw_grid(self.screen)
         self.draw_enemies(self.screen)
         self.draw_player(self.screen)
+        self.draw_health_bar(self.screen)

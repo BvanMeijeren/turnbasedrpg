@@ -3,7 +3,7 @@ from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 class Character:
     #stats
-    def __init__(self, x, y, name, id, level, xp, hitpoints, critical_chance, critical_multiplier, species, 
+    def __init__(self, x, y, name, id, level, xp, hitpoints, max_hitpoints, critical_chance, critical_multiplier, species, 
                  fire_def, ice_def, electricity_def, skills, items, equipped_weapon, profession):
         self.x = x
         self.y = y
@@ -12,6 +12,7 @@ class Character:
         self.level = level
         self.xp = xp # for enemies, this is how much you gain upon slaying them
         self.hitpoints = hitpoints
+        self.max_hitpoints = max_hitpoints
         self.critical_chance = critical_chance # as a proportion
         self.critical_multiplier = critical_multiplier # decimal
         self.species = species
