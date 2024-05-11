@@ -1,5 +1,6 @@
 import pygame
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from weapon_generator import *
 
 class Character:
     #stats
@@ -9,19 +10,19 @@ class Character:
         self.y = y
         self.name = name 
         self.id = id
-        self.level = level
-        self.xp = xp # for enemies, this is how much you gain upon slaying them
+        self.level = 1
+        self.xp = 0 # for enemies, this is how much you gain upon slaying them
         self.hitpoints = hitpoints
         self.max_hitpoints = max_hitpoints
-        self.critical_chance = critical_chance # as a proportion
-        self.critical_multiplier = critical_multiplier # decimal
+        self.critical_chance = 0.05 # as a proportion
+        self.critical_multiplier = 1.5 # decimal
         self.species = species
-        self.fire_def = fire_def # from -100 to 100 percent
-        self.ice_def = ice_def # from -100 to 100 percent
-        self.electricity_def = electricity_def # from -100 to 100 percent
-        self.skills = skills
-        self.items = items
-        self.equipped_weapon = equipped_weapon
+        self.fire_def = fire_def # from -1 to 1
+        self.ice_def = ice_def # from -1 to 1
+        self.electricity_def = electricity_def # from -1 to 1
+        self.skills = None
+        self.items = None
+        self.equipped_weapon = None
         self.profession = profession
 
         # for rendering

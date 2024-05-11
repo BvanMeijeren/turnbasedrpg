@@ -16,10 +16,13 @@ class CombatScreen:
 
     def draw_text(self, screen):
         screen.fill(BLACK)
+
+        # visualize texts
         screen.blit(self.text, self.text_rect)
 
-        # scale image
+        # scale images
         player_image = pygame.transform.scale(self.player.image, (SCREEN_WIDTH*0.2, SCREEN_WIDTH*0.2))
+
         # Load images
         self.screen.blit(player_image, (0, SCREEN_HEIGHT*0.3))
 

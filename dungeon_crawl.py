@@ -14,7 +14,8 @@ class GridGame:
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.player = player
-        self.enemies = [Enemy(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(3)]
+        #self.enemies = [Enemy(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(3)]
+        self.enemies = self.generate_enemies(player=player, nr_enemies=3)
         self.obstacles = [Obstacle(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(10)]
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.exit = self.generate_valid_exit()
@@ -22,11 +23,26 @@ class GridGame:
         self.exits_reached = 0
 
         # Load the enemy image
-        self.enemy_image = pygame.image.load("graphics/goblin.png")
-        self.enemy_image = pygame.transform.scale(self.enemy_image, (GRID_SIZE, GRID_SIZE))
+        #self.enemy_image = pygame.image.load("graphics/goblin.png")
+        #self.enemy_image = pygame.transform.scale(self.enemy_image, (GRID_SIZE, GRID_SIZE))
 
         # Load player image
         self.player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
+
+    ### Generate enemies
+    def generate_enemies(self, player, nr_enemies):
+        for _ in range(nr_enemies):
+            Character(
+                x=random.randint(0, self.grid_width - 1),
+                y=random.randint(0, self.grid_height - 1),
+                id=_,
+                name= 'Enemy',
+                species='Monster',
+                hitpoints= random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5),
+                max_hitpoints= random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5),
+                level=self.player.level
+            ) 
+        
 
     #### Grid game drawing function ####
     def draw_grid(self, screen):
@@ -65,11 +81,12 @@ class GridGame:
     def draw_enemies(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
+
         for enemy in self.enemies:
             # Calculate the position to blit the enemy image
-            enemy_rect = self.enemy_image.get_rect(topleft=(enemy.x * GRID_SIZE + grid_offset_x, enemy.y * GRID_SIZE + grid_offset_y))
+            enemy_rect = enemy.image.get_rect(topleft=(enemy.x * GRID_SIZE + grid_offset_x, enemy.y * GRID_SIZE + grid_offset_y))
             # Blit the enemy image onto the screen
-            screen.blit(self.enemy_image, enemy_rect)
+            screen.blit(enemy.image, enemy_rect)
 
     def draw_health_bar(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
