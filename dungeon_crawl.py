@@ -1,6 +1,7 @@
 # grid_game.py
 import pygame
 import random
+import copy
 
 #from player import Player
 #from enemy import Enemy 
@@ -14,17 +15,12 @@ class GridGame:
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.player = player
-        #self.enemies = [Enemy(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(3)]
-        self.enemies = self.generate_enemies(nr_enemies=3)
+        self.enemies = self.generate_enemies(nr_enemies=2)
         self.obstacles = [Obstacle(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(10)]
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.exit = self.generate_valid_exit()
         self.player_moved = False
         self.exits_reached = 0
-
-        # Load the enemy image
-        #self.enemy_image = pygame.image.load("graphics/goblin.png")
-        #self.enemy_image = pygame.transform.scale(self.enemy_image, (GRID_SIZE, GRID_SIZE))
 
         # Load player image
         self.player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
@@ -33,7 +29,7 @@ class GridGame:
     def generate_enemies(self, nr_enemies):
         chosen_enemies = [] # these will spawn on the current floor the player is on
         for _ in range(nr_enemies):
-            chosen_enemy = random.choice(all_enemies_in_the_game)
+            chosen_enemy = copy.copy(random.choice(all_enemies_in_the_game))
             chosen_enemy.x = random.randint(0, self.grid_width - 1)
             chosen_enemy.y = random.randint(0, self.grid_height - 1)
             chosen_enemy.hitpoints = random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5)
@@ -56,6 +52,7 @@ class GridGame:
             obstacle_rect = pygame.Rect(obstacle.x * GRID_SIZE + grid_offset_x, obstacle.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
             pygame.draw.rect(screen, BROWN, obstacle_rect)
         if self.exit:
+            #self.enemies = self.generate_enemies(3)
             exit_rect = pygame.Rect(self.exit.x * GRID_SIZE + grid_offset_x, self.exit.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
             pygame.draw.rect(screen, GREEN, exit_rect)
 
@@ -81,7 +78,6 @@ class GridGame:
     def draw_enemies(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
-
         for enemy in self.enemies:
             # scale image for enemies
             enemy.image = pygame.transform.scale(enemy.image, (GRID_SIZE, GRID_SIZE))
@@ -148,14 +144,13 @@ class GridGame:
             enemy_y = enemy.y
             player_x = self.player.x
             player_y = self.player.y
-            print("player x: " + str(player_x) + " enemy x: " + str(enemy_x) )
             dx = 0 if enemy_x == player_x else (1 if enemy_x < player_x else -1)
             dy = 0 if enemy_y == player_y else (1 if enemy_y < player_y else -1)
 
             new_x = enemy_x + dx
             new_y = enemy_y + dy
             if not self.is_obstacle(new_x, new_y) and 0 <= new_x < self.grid_width and 0 <= new_y < self.grid_height:
-                enemy.move(player_x, player_y)
+                enemy.enemy_move(player_x, player_y)
 
     def is_obstacle(self, x, y):
         for obstacle in self.obstacles:
@@ -173,6 +168,10 @@ class GridGame:
     def check_exit(self):
         if self.player.x == self.exit.x and self.player.y == self.exit.y:
             self.exits_reached += 1
+
+            # Generate new enemies for the next level
+            self.enemies = self.generate_enemies(nr_enemies=2)
+
             #self.enemies = [Enemy(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(3)]
             self.obstacles = [Obstacle(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(10)]
             self.exit = self.generate_valid_exit()

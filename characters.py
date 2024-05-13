@@ -9,7 +9,6 @@ class Character:
         self.x = x
         self.y = y
         self.name = name 
-        #self.id = id
         self.level = level
         self.xp = xp # for enemies, this is how much you gain upon slaying them
         self.hitpoints = hitpoints
@@ -37,6 +36,16 @@ class Character:
         self.x += dx
         self.y += dy
 
+    def enemy_move(self, player_x, player_y):
+        if self.x < player_x:
+            self.x += 1
+        elif self.x > player_x:
+            self.x -= 1
+        if self.y < player_y:
+            self.y += 1
+        elif self.y > player_y:
+            self.y -= 1
+
 
 # enemies
 
@@ -45,7 +54,7 @@ all_enemies_in_the_game = []
 Goblin = Character(
     x = 0, # overwritten later
     y = 0, # overwritten later
-    name="Enemy", 
+    name="Goblin Niffler", 
     level=1, #
     xp=0,
     hitpoints=50, # overwritten based on player level
@@ -62,5 +71,26 @@ Goblin = Character(
     profession="Knight"
 ) 
 Goblin.image = pygame.image.load("graphics/goblin.png").convert()
-
 all_enemies_in_the_game.append(Goblin)
+
+Skeleton = Character(
+    x = 0, # overwritten later
+    y = 0, # overwritten later
+    name="Wonky Skeleton", 
+    level=1, #
+    xp=0,
+    hitpoints=30, # overwritten based on player level
+    max_hitpoints=50, # overwritten based on player level
+    critical_chance=0.05, 
+    critical_multiplier=1.5,
+    species="Undead", 
+    fire_def=100,
+    ice_def=100,
+    electricity_def=100,
+    skills=None, 
+    items=None,
+    equipped_weapon=None,
+    profession="Knight"
+) 
+Skeleton.image = pygame.image.load("graphics/skeleton.png").convert()
+all_enemies_in_the_game.append(Skeleton)
