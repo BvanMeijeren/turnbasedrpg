@@ -3,11 +3,11 @@ import pygame
 import random
 
 #from player import Player
-from enemy import Enemy 
+#from enemy import Enemy 
 from obstacle import Obstacle
 from exit import Exit
 from constants import *
-from characters import Character
+from characters import Character, all_enemies_in_the_game
 
 class GridGame:
     def __init__(self, grid_width, grid_height, player):
@@ -15,7 +15,7 @@ class GridGame:
         self.grid_height = grid_height
         self.player = player
         #self.enemies = [Enemy(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(3)]
-        self.enemies = self.generate_enemies(player=player, nr_enemies=3)
+        self.enemies = self.generate_enemies(nr_enemies=3)
         self.obstacles = [Obstacle(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(10)]
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.exit = self.generate_valid_exit()
@@ -30,18 +30,18 @@ class GridGame:
         self.player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
 
     ### Generate enemies
-    def generate_enemies(self, player, nr_enemies):
+    def generate_enemies(self, nr_enemies):
+        chosen_enemies = [] # these will spawn on the current floor the player is on
         for _ in range(nr_enemies):
-            Character(
-                x=random.randint(0, self.grid_width - 1),
-                y=random.randint(0, self.grid_height - 1),
-                id=_,
-                name= 'Enemy',
-                species='Monster',
-                hitpoints= random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5),
-                max_hitpoints= random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5),
-                level=self.player.level
-            ) 
+            chosen_enemy = random.choice(all_enemies_in_the_game)
+            chosen_enemy.x = random.randint(0, self.grid_width - 1)
+            chosen_enemy.y = random.randint(0, self.grid_height - 1)
+            chosen_enemy.hitpoints = random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5)
+            chosen_enemy.max_hitpoints = random.randint(self.player.max_hitpoints*0.3, self.player.max_hitpoints*0.5)
+            chosen_enemies.append(chosen_enemy)
+
+        return chosen_enemies
+
         
 
     #### Grid game drawing function ####
@@ -83,6 +83,8 @@ class GridGame:
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
 
         for enemy in self.enemies:
+            # scale image for enemies
+            enemy.image = pygame.transform.scale(enemy.image, (GRID_SIZE, GRID_SIZE))
             # Calculate the position to blit the enemy image
             enemy_rect = enemy.image.get_rect(topleft=(enemy.x * GRID_SIZE + grid_offset_x, enemy.y * GRID_SIZE + grid_offset_y))
             # Blit the enemy image onto the screen
@@ -146,7 +148,7 @@ class GridGame:
             enemy_y = enemy.y
             player_x = self.player.x
             player_y = self.player.y
-
+            print("player x: " + str(player_x) + " enemy x: " + str(enemy_x) )
             dx = 0 if enemy_x == player_x else (1 if enemy_x < player_x else -1)
             dy = 0 if enemy_y == player_y else (1 if enemy_y < player_y else -1)
 
@@ -171,7 +173,7 @@ class GridGame:
     def check_exit(self):
         if self.player.x == self.exit.x and self.player.y == self.exit.y:
             self.exits_reached += 1
-            self.enemies = [Enemy(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(3)]
+            #self.enemies = [Enemy(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(3)]
             self.obstacles = [Obstacle(random.randint(0, self.grid_width - 1), random.randint(0, self.grid_height - 1)) for _ in range(10)]
             self.exit = self.generate_valid_exit()
             if not self.exit:

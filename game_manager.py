@@ -17,7 +17,6 @@ class GameManager:
         self.player = Character(x=0, 
                                 y=0, 
                                 name="Bas", 
-                                id=1, 
                                 level=1, 
                                 xp=0,
                                 hitpoints=50, 
