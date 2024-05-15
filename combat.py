@@ -5,7 +5,7 @@ from constants import *
 from enemy import *
 
 class CombatScreen:
-    def __init__(self,player):
+    def __init__(self, player):
         self.font = pygame.font.Font(None, 36)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.player = player

@@ -8,6 +8,7 @@ from combat import CombatScreen
 from character_creation import CharacterCreation
 from constants import *
 from characters import Character
+from weapons import *
 
 class GameManager:
     def __init__(self):
@@ -29,7 +30,7 @@ class GameManager:
                                 electricity_def=100,
                                 skills=None, 
                                 items=None,
-                                equipped_weapon=None,
+                                equipped_weapon=create_starterweapon(),
                                 profession="Knight"
                                 )
         self.start_menu = StartMenu()
@@ -61,9 +62,7 @@ class GameManager:
         if self.gamestate == START_MENU:
             self.start_menu.draw(self.screen)
         elif self.gamestate == CHARACTER_CREATION:
-            #self.player = self.character_creation.run() # try without this first!
             self.character_creation.run()
-            print("chosen professiong is " + self.player.profession)
         elif self.gamestate == GRID_GAME:
             self.grid_game.run()
         elif self.gamestate == COMBAT_SCREEN:

@@ -1,6 +1,6 @@
 import pygame
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
-from weapon_generator import *
+from weapons import *
 
 class Character:
     #stats
@@ -67,7 +67,7 @@ Goblin = Character(
     electricity_def=100,
     skills=None, 
     items=None,
-    equipped_weapon=None,
+    equipped_weapon=create_starterweapon(),
     profession="Knight"
 ) 
 Goblin.image = pygame.image.load("graphics/goblin.png").convert()
@@ -89,7 +89,7 @@ Skeleton = Character(
     electricity_def=100,
     skills=None, 
     items=None,
-    equipped_weapon=None,
+    equipped_weapon=create_starterweapon(),
     profession="Knight"
 ) 
 Skeleton.image = pygame.image.load("graphics/skeleton.png").convert()

@@ -17,8 +17,8 @@ class GridGame:
         self.player = player
         self.enemies = self.generate_enemies(nr_enemies=2)
         self.obstacles = [Obstacle(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(10)]
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.exit = self.generate_valid_exit()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.player_moved = False
         self.exits_reached = 0
 
