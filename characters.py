@@ -1,5 +1,5 @@
 import pygame
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH, screen
 from weapons import *
 
 class Character:
@@ -25,8 +25,6 @@ class Character:
         self.profession = profession
 
         # for rendering
-        super().__init__()
-        pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.image = pygame.image.load("graphics/goblin.png").convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)

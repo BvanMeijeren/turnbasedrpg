@@ -9,6 +9,7 @@ from obstacle import Obstacle
 from exit import Exit
 from constants import *
 from characters import Character, all_enemies_in_the_game
+from obstacle import forest_obstacles
 
 class GridGame:
     def __init__(self, grid_width, grid_height, player):
@@ -16,9 +17,9 @@ class GridGame:
         self.grid_height = grid_height
         self.player = player
         self.enemies = self.generate_enemies(nr_enemies=2)
-        self.obstacles = [Obstacle(random.randint(0, grid_width - 1), random.randint(0, grid_height - 1)) for _ in range(10)]
+        self.obstacles = self.generate_obstacles(nr_obstacles=10)
         self.exit = self.generate_valid_exit()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = screen
         self.player_moved = False
         self.exits_reached = 0
 
@@ -37,20 +38,39 @@ class GridGame:
             chosen_enemies.append(chosen_enemy)
 
         return chosen_enemies
+    
+    def generate_obstacles(self, nr_obstacles):
+        chosen_obstacles = []
+        for _ in range(nr_obstacles):
+            chosen_obstacle = copy.copy(random.choice(forest_obstacles))
+            chosen_obstacle.x = random.randint(0, self.grid_width - 1)
+            chosen_obstacle.y = random.randint(0, self.grid_height - 1)
+            chosen_obstacles.append(chosen_obstacle)
 
-        
+        return chosen_obstacles
+
 
     #### Grid game drawing function ####
     def draw_grid(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
+
+        # grid
         for y in range(self.grid_height):
             for x in range(self.grid_width):
                 rect = pygame.Rect(x * GRID_SIZE + grid_offset_x, y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
                 pygame.draw.rect(screen, WHITE, rect, 1)
+
+        # add obstacles
         for obstacle in self.obstacles:
+            # scale image
+            obstacle.image = pygame.transform.scale(obstacle.image, (GRID_SIZE, GRID_SIZE))
+            # get rectangle
             obstacle_rect = pygame.Rect(obstacle.x * GRID_SIZE + grid_offset_x, obstacle.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
-            pygame.draw.rect(screen, BROWN, obstacle_rect)
+            # Blit the enemy image onto the screen
+            screen.blit(obstacle.image, obstacle_rect)
+
+        # add exit
         if self.exit:
             #self.enemies = self.generate_enemies(3)
             exit_rect = pygame.Rect(self.exit.x * GRID_SIZE + grid_offset_x, self.exit.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)

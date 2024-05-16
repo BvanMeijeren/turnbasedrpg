@@ -37,7 +37,7 @@ class GameManager:
         self.character_creation = CharacterCreation(player = self.player)
         self.grid_game = GridGame(GRID_WIDTH, GRID_HEIGHT, player = self.player)
         self.combat_screen = CombatScreen(player = self.player)
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = screen
         self.clock = pygame.time.Clock()
         self.gamestate= START_MENU # initial gamestate
 

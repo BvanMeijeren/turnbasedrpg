@@ -8,7 +8,7 @@ class CharacterCreation:
     def __init__(self, player):
         pygame.display.set_caption("Character Creation")
         self.font = pygame.font.Font(None, 36)
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = screen
         self.selected_profession = 0
         self.selected_race = 0
         self.player = player
