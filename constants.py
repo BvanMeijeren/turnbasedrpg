@@ -16,7 +16,9 @@ BROWN = (139, 69, 19)
 GREEN = (0, 255, 0)
 
 # Set up grid parameters
+#tile size
 GRID_SIZE = 50
+# nr of tiles
 GRID_WIDTH = 10
 GRID_HEIGHT = 10
 

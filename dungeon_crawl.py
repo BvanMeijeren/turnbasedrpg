@@ -10,6 +10,7 @@ from exit import Exit
 from constants import *
 from characters import Character, all_enemies_in_the_game
 from obstacle import forest_obstacles
+from backgrounds import choose_background_texture
 
 class GridGame:
     def __init__(self, grid_width, grid_height, player):
@@ -18,6 +19,7 @@ class GridGame:
         self.player = player
         self.enemies = self.generate_enemies(nr_enemies=2)
         self.obstacles = self.generate_obstacles(nr_obstacles=10)
+        self.biome = 'Forest' # forest by default
         self.exit = self.generate_valid_exit()
         self.screen = screen
         self.player_moved = False
@@ -49,6 +51,15 @@ class GridGame:
 
         return chosen_obstacles
 
+    # background texture
+    def draw_background(self):
+        grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
+        grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
+
+        background_texture = choose_background_texture(self.biome)
+        background_texture = pygame.transform.scale(background_texture, ( (GRID_SIZE * GRID_WIDTH), (GRID_SIZE * GRID_HEIGHT) ))
+        background_texture_rect = pygame.Rect( (GRID_SIZE + grid_offset_x - 50), (GRID_SIZE + grid_offset_y -50), GRID_SIZE, GRID_SIZE)
+        screen.blit(background_texture, background_texture_rect)
 
     #### Grid game drawing function ####
     def draw_grid(self, screen):
@@ -214,6 +225,7 @@ class GridGame:
         return nr_colliding_enemies
 
     def run(self):
+        self.draw_background()
         self.draw_grid(self.screen)
         self.draw_enemies(self.screen)
         self.draw_player(self.screen)
