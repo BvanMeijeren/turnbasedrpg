@@ -3,7 +3,7 @@ import sys
 import random
 
 from constants import *
-from ui_selection_menu import *
+from ui_widgets import *
 
 class CharacterCreation:
     def __init__(self, player):
