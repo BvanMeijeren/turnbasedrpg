@@ -29,3 +29,6 @@ def draw_health_bar(self, screen):
     # Draw the filled portion of the health bar in red
     fill_rect = pygame.Rect(grid_offset_x, grid_offset_y, fill_width, health_bar_height)
     pygame.draw.rect(screen, RED, fill_rect)
+
+# speech popup for NPCs
+#def speech_popup(self,screen):

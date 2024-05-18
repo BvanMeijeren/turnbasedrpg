@@ -83,9 +83,10 @@ class GridGame:
 
         # add exit
         if self.exit:
-            #self.enemies = self.generate_enemies(3)
             exit_rect = pygame.Rect(self.exit.x * GRID_SIZE + grid_offset_x, self.exit.y * GRID_SIZE + grid_offset_y, GRID_SIZE, GRID_SIZE)
-            pygame.draw.rect(screen, GREEN, exit_rect)
+            exit_image = pygame.image.load("graphics/stairs.png").convert()
+            exit_image = pygame.transform.scale(exit_image, (GRID_SIZE, GRID_SIZE))
+            screen.blit(exit_image, exit_rect)
 
     def draw_player(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
