@@ -28,7 +28,7 @@ class GameManager:
                                 fire_def=100,
                                 ice_def=100,
                                 electricity_def=100,
-                                skills=None, 
+                                skills='Fireball', # should be set to skills, firebal is just for testing 
                                 items=None,
                                 equipped_weapon=create_starterweapon(),
                                 profession="Knight"

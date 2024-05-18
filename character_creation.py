@@ -3,6 +3,7 @@ import sys
 import random
 
 from constants import *
+from ui_selection_menu import *
 
 class CharacterCreation:
     def __init__(self, player):
@@ -21,7 +22,14 @@ class CharacterCreation:
     def give_player_profession(self, profession):
         # update player object with chosen profession
         self.player.profession = self.classes[profession]
-        #print("Chosen profession: " + self.classes[profession])
+        
+        # Update player sprite accroding to selected profession
+        if self.player.profession == 'Knight':
+            self.player.image = pygame.image.load("graphics/knight.png").convert_alpha()
+        elif self.player.profession == 'Mage':
+            self.player.image = pygame.image.load("graphics/wizard.png").convert_alpha()
+        elif self.player.profession == 'Rogue':
+            self.player.image = pygame.image.load("graphics/thief.png").convert_alpha()
 
     def handle_input(self, event):
         gamestate = CHARACTER_CREATION
@@ -45,8 +53,6 @@ class CharacterCreation:
         return gamestate
          
 
-
-
     def render(self, screen):
         #print("blacken the screen")
         # screen.fill(BLACK)
@@ -56,30 +62,25 @@ class CharacterCreation:
         screen.blit(background_image, (0, 0))
 
         if self.still_creating_character:
-            select_text = self.font.render("Select Class:", True, WHITE)
-            select_rect = select_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
-            screen.blit(select_text, select_rect)
-
-            for i, class_name in enumerate(self.classes):
-                text_color = RED if self.selected_profession == i else WHITE
-                class_option_text = self.font.render(class_name, True, text_color)
-                class_option_rect = class_option_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 30 * (i + 1)))
-                screen.blit(class_option_text, class_option_rect)
+            selection_menu(
+                self=self, 
+                attribute= self.selected_profession,
+                title="Select your class:", 
+                options=self.classes
+                )
         else:
-            select_text = self.font.render("Select Race:", True, WHITE)
-            select_rect = select_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
-            screen.blit(select_text, select_rect)
-
-            for i, race_name in enumerate(self.races):
-                text_color = RED if self.selected_race == i else WHITE
-                race_option_text = self.font.render(race_name, True, text_color)
-                race_option_rect = race_option_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 30 * (i + 1)))
-                screen.blit(race_option_text, race_option_rect)
+            selection_menu(
+                self=self,
+                attribute=self.selected_race,
+                title="Select your race:",
+                options=self.races
+            )
 
         pygame.display.flip()
 
     def run(self):
         self.render(self.screen)
         self.give_player_profession(self.selected_profession)
+
 
 

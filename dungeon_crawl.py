@@ -26,7 +26,7 @@ class GridGame:
         self.exits_reached = 0
 
         # Load player image
-        self.player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
+        #self.player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
 
     ### Generate enemies
     def generate_enemies(self, nr_enemies):
@@ -91,20 +91,13 @@ class GridGame:
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
 
-        # Update player sprite accroding to selected profession
-        if self.player.profession == 'Knight':
-            self.player_image = pygame.image.load("graphics/knight.png").convert_alpha()
-        elif self.player.profession == 'Mage':
-            self.player_image = pygame.image.load("graphics/wizard.png").convert_alpha()
-        elif self.player.profession == 'Rogue':
-            self.player_image = pygame.image.load("graphics/thief.png").convert_alpha()
         # scale image
-        self.player_image = pygame.transform.scale(self.player_image, (GRID_SIZE, GRID_SIZE))
+        player_image = pygame.transform.scale(self.player.image, (GRID_SIZE, GRID_SIZE))
 
         # Calculate the position to blit the enemy image
         # Blit the enemy image onto the screen
-        player_rect = self.player_image.get_rect(topleft=(self.player.x * GRID_SIZE + grid_offset_x, self.player.y * GRID_SIZE + grid_offset_y))
-        screen.blit(self.player_image, player_rect)
+        player_rect = player_image.get_rect(topleft=(self.player.x * GRID_SIZE + grid_offset_x, self.player.y * GRID_SIZE + grid_offset_y))
+        screen.blit(player_image, player_rect)
 
     def draw_enemies(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
