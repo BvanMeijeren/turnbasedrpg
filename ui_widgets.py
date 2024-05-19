@@ -112,6 +112,13 @@ def player_status_menu(self):
         y = y
     )
 
+    # player avatar
+    player_avatar = self.player.image
+
+    player_avatar = pygame.transform.scale(player_avatar, (square_size[0]*0.1, square_size[1]) )
+    player_avatar_rect = pygame.Rect( x,y, square_size[0]*0.1, square_size[1] )
+    screen.blit(player_avatar, player_avatar_rect)
+
     # health status bar
     health_bar_rects = draw_status_bar(
          self, 

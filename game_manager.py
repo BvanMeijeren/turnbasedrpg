@@ -33,7 +33,8 @@ class GameManager:
                                 skills=['Fireball', 'Ice Shard'], # should be set to skills, firebal is just for testing 
                                 items=None,
                                 equipped_weapon=create_starterweapon(),
-                                profession="Knight"
+                                profession="Knight",
+                                encountered_enemies=[]
                                 )
         self.start_menu = StartMenu()
         self.character_creation = CharacterCreation(player = self.player)

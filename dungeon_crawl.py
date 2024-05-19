@@ -10,7 +10,7 @@ from exit import Exit
 from constants import *
 from characters import Character, all_enemies_in_the_game
 from obstacle import forest_obstacles
-from backgrounds import choose_background_texture
+from backgrounds import choose_grid_background
 from ui_widgets import player_status_menu
 
 class GridGame:
@@ -19,6 +19,7 @@ class GridGame:
         self.grid_height = grid_height
         self.player = player
         self.enemies = self.generate_enemies(nr_enemies=2)
+        self.player.enemies_encountered = []
         self.obstacles = self.generate_obstacles(nr_obstacles=10)
         self.biome = 'Forest' # forest by default
         self.exit = self.generate_valid_exit()
@@ -57,7 +58,7 @@ class GridGame:
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
 
-        background_texture = choose_background_texture(self.biome)
+        background_texture = choose_grid_background(self.biome)
         background_texture = pygame.transform.scale(background_texture, ( (GRID_SIZE * GRID_WIDTH), (GRID_SIZE * GRID_HEIGHT) ))
         background_texture_rect = pygame.Rect( (GRID_SIZE + grid_offset_x - 50), (GRID_SIZE + grid_offset_y -50), GRID_SIZE, GRID_SIZE)
         screen.blit(background_texture, background_texture_rect)
@@ -193,19 +194,21 @@ class GridGame:
                 self.exit = self.generate_valid_exit()  # Regenerate the exit if it's not valid
 
     def check_enemy_collision(self):
-        enemies_to_remove = []
+        enemies_colliding_with_player = []
         for enemy in self.enemies:
             if enemy.x == self.player.x and enemy.y == self.player.y:
-                enemies_to_remove.append(enemy)     # add colliding enemy to remove list
+                enemies_colliding_with_player.append(enemy)     # add colliding enemy to remove list
 
-        # count nr of colliding enemies
-        nr_colliding_enemies = len(enemies_to_remove)
+        # count encountered enemies and store 
+        self.player.enemies_encountered = enemies_colliding_with_player
+        nr_enemies_encountered = len(enemies_colliding_with_player)
+        print('colliding with ' + str(nr_enemies_encountered) + ' enemies' )
 
         # remove all colliding enemies
-        for enemy in enemies_to_remove:
+        for enemy in enemies_colliding_with_player:
             self.enemies.remove(enemy)
-
-        return nr_colliding_enemies
+        
+        return nr_enemies_encountered
 
     def run(self):
         self.draw_background()

@@ -4,6 +4,7 @@ import random
 
 from constants import *
 from ui_widgets import centered_popup
+from backgrounds import choose_combat_background
 
 class StartMenu:
     def __init__(self):
@@ -24,7 +25,8 @@ class StartMenu:
     
     def draw(self, screen):
         # Load background image
-        background_image = pygame.image.load("graphics/forest.jpg").convert()
+        background_image = choose_combat_background('Forest') # hardcoded forest texture for start menu
+        #background_image = pygame.image.load("graphics/forest.jpg").convert()
         screen.blit(background_image, (0, 0))
 
         # add square

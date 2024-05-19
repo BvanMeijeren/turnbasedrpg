@@ -5,7 +5,7 @@ from weapons import *
 class Character:
     #stats
     def __init__(self, x, y, name, level, xp, hitpoints, max_hitpoints, stamina, max_stamina, critical_chance, critical_multiplier, species, 
-                 fire_def, ice_def, electricity_def, skills, items, equipped_weapon, profession):
+                 fire_def, ice_def, electricity_def, skills, items, equipped_weapon, profession, encountered_enemies):
         self.x = x
         self.y = y
         self.name = name 
@@ -25,6 +25,7 @@ class Character:
         self.items = items
         self.equipped_weapon = equipped_weapon
         self.profession = profession
+        self.encountered_enemies = encountered_enemies
 
         # for rendering
         self.image = pygame.image.load("graphics/goblin.png").convert()
@@ -70,7 +71,8 @@ Goblin = Character(
     skills=None, 
     items=None,
     equipped_weapon=create_starterweapon(),
-    profession="Knight"
+    profession="Knight",
+    encountered_enemies=[]
 ) 
 Goblin.image = pygame.image.load("graphics/goblin.png").convert()
 all_enemies_in_the_game.append(Goblin)
@@ -94,7 +96,8 @@ Skeleton = Character(
     skills=None, 
     items=None,
     equipped_weapon=create_starterweapon(),
-    profession="Knight"
+    profession="Knight",
+    encountered_enemies=[]
 ) 
 Skeleton.image = pygame.image.load("graphics/skeleton.png").convert()
 all_enemies_in_the_game.append(Skeleton)
