@@ -4,7 +4,7 @@ from weapons import *
 
 class Character:
     #stats
-    def __init__(self, x, y, name, level, xp, hitpoints, max_hitpoints, critical_chance, critical_multiplier, species, 
+    def __init__(self, x, y, name, level, xp, hitpoints, max_hitpoints, stamina, max_stamina, critical_chance, critical_multiplier, species, 
                  fire_def, ice_def, electricity_def, skills, items, equipped_weapon, profession):
         self.x = x
         self.y = y
@@ -13,6 +13,8 @@ class Character:
         self.xp = xp # for enemies, this is how much you gain upon slaying them
         self.hitpoints = hitpoints
         self.max_hitpoints = max_hitpoints
+        self.stamina = stamina
+        self.max_stamina = max_stamina
         self.critical_chance = critical_chance # as a proportion
         self.critical_multiplier = critical_multiplier # decimal
         self.species = species
@@ -57,6 +59,8 @@ Goblin = Character(
     xp=0,
     hitpoints=50, # overwritten based on player level
     max_hitpoints=50, # overwritten based on player level
+    stamina=20,
+    max_stamina=20,
     critical_chance=0.05, 
     critical_multiplier=1.5,
     species="Monster", 
@@ -79,6 +83,8 @@ Skeleton = Character(
     xp=0,
     hitpoints=30, # overwritten based on player level
     max_hitpoints=50, # overwritten based on player level
+    stamina=20,
+    max_stamina=20,
     critical_chance=0.05, 
     critical_multiplier=1.5,
     species="Undead", 

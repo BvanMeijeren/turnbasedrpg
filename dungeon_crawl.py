@@ -11,6 +11,7 @@ from constants import *
 from characters import Character, all_enemies_in_the_game
 from obstacle import forest_obstacles
 from backgrounds import choose_background_texture
+from ui_widgets import player_status_menu
 
 class GridGame:
     def __init__(self, grid_width, grid_height, player):
@@ -88,6 +89,11 @@ class GridGame:
             exit_image = pygame.transform.scale(exit_image, (GRID_SIZE, GRID_SIZE))
             screen.blit(exit_image, exit_rect)
 
+
+    # def draw_player_menu(self):
+    #         player_status_menu(self)
+
+
     def draw_player(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
@@ -100,6 +106,7 @@ class GridGame:
         player_rect = player_image.get_rect(topleft=(self.player.x * GRID_SIZE + grid_offset_x, self.player.y * GRID_SIZE + grid_offset_y))
         screen.blit(player_image, player_rect)
 
+
     def draw_enemies(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
         grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
@@ -110,24 +117,6 @@ class GridGame:
             enemy_rect = enemy.image.get_rect(topleft=(enemy.x * GRID_SIZE + grid_offset_x, enemy.y * GRID_SIZE + grid_offset_y))
             # Blit the enemy image onto the screen
             screen.blit(enemy.image, enemy_rect)
-
-    def draw_health_bar(self, screen):
-        grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
-        grid_offset_y = (SCREEN_HEIGHT - self.grid_height * GRID_SIZE) // 2
-        health_bar_width = self.grid_width * GRID_SIZE
-        health_bar_height = 20
-        health_bar_rect = pygame.Rect(grid_offset_x, grid_offset_y + self.grid_height * GRID_SIZE + 10, health_bar_width, health_bar_height)
-        
-        # Calculate the width of the health bar based on player's current health
-        current_hp_percentage = max(self.player.hitpoints / self.player.max_hitpoints, 0)
-        fill_width = int(health_bar_width * current_hp_percentage)
-        
-        # Draw the empty health bar
-        pygame.draw.rect(screen, BLACK, health_bar_rect)
-        
-        # Draw the filled portion of the health bar in red
-        fill_rect = pygame.Rect(grid_offset_x, grid_offset_y + self.grid_height * GRID_SIZE + 10, fill_width, health_bar_height)
-        pygame.draw.rect(screen, RED, fill_rect)
 
     ### quite to menu ###
     def return_to_menu(self):
@@ -221,6 +210,6 @@ class GridGame:
     def run(self):
         self.draw_background()
         self.draw_grid(self.screen)
+        player_status_menu(self)
         self.draw_enemies(self.screen)
         self.draw_player(self.screen)
-        self.draw_health_bar(self.screen)

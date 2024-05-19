@@ -99,6 +99,6 @@ class CombatScreen:
 
     def run(self):
         self.draw_visuals(self.screen)
-        draw_health_bar(self, screen=self.screen)
         self.draw_combat_menu(self.screen)
+        player_status_menu(self)
         self.player_turn()
