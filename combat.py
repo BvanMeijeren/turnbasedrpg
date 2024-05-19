@@ -8,10 +8,9 @@ from backgrounds import choose_combat_background
 
 class CombatScreen:
     def __init__(self, player):
-        self.font = pygame.font.Font(None, 36)
+        self.font = font_normal
         self.screen = screen
         self.player = player
-        self.encountered_enemies = player.encountered_enemies
         self.action_types = ['Attack', 'Spells', 'Items']
         self.skills = ['Fireball', 'Ice Shard']
         self.selected_action_type = 0
@@ -26,9 +25,8 @@ class CombatScreen:
         screen.blit(background_image, (0, 0))
         #screen.fill(BLACK)
 
-        print('encountering nr of enemies: ' + str(len(self.encountered_enemies)) )
         enemy_names = ''
-        for enemy in self.encountered_enemies:
+        for enemy in self.player.encountered_enemies:
             enemy_names = enemy_names + 'and a ' + enemy.name
 
         enemy_names = enemy_names + '!'
@@ -38,11 +36,15 @@ class CombatScreen:
         self.text_rect = self.text.get_rect(center=(SCREEN_WIDTH // 2, (SCREEN_HEIGHT // 2 - 400) ))
         screen.blit(self.text, self.text_rect)
 
-        # scale images
+        # show player image
         player_image = pygame.transform.scale(self.player.image, (SCREEN_WIDTH*0.2, SCREEN_WIDTH*0.2))
+        self.screen.blit(player_image, (SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.3) )
 
-        # Load images
-        self.screen.blit(player_image, (SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.3))
+        # show enemy image
+        if self.player.encountered_enemies:
+            enemy = self.player.encountered_enemies[0]
+            enemy_image = pygame.transform.scale(enemy.image, (SCREEN_WIDTH * 0.2, SCREEN_WIDTH * 0.2) )
+            self.screen.blit(enemy_image, ((SCREEN_WIDTH*0.75), (SCREEN_HEIGHT*0.15) ) )
 
     def draw_combat_menu(self, screen):
         if self.has_selected_action_type == False:
@@ -59,8 +61,6 @@ class CombatScreen:
                 title="What will you do?",
                 options=self.skills
             )
-
-        pygame.display.flip()
 
 
     def handle_input(self, event):
@@ -109,5 +109,6 @@ class CombatScreen:
     def run(self):
         self.draw_visuals(self.screen)
         self.draw_combat_menu(self.screen)
-        player_status_menu(self)
+        player_status_menu(self, self.screen)
         self.player_turn()
+        pygame.display.flip()

@@ -94,8 +94,16 @@ def draw_status_bar(self, x, y, attribute, max_attribute):
 
         return status_bar_rects
 
+# player stat texts for hp and stuff: "50/50"
+def display_player_stat_text(self, x, y, attribute, max_attribute):
 
-def player_status_menu(self):
+    # Status bar white text
+    self.text = self.font.render( str(attribute) + ' / ' + str(max_attribute), True, WHITE)
+    self.text_rect = self.text.get_rect(center=( x-30, y ) )
+    screen.blit(self.text, self.text_rect)
+
+
+def player_status_menu(self, screen):
 
     square_size = (SCREEN_WIDTH, SCREEN_HEIGHT / 6)
     x = (SCREEN_WIDTH - square_size[0]) // 2
@@ -132,6 +140,13 @@ def player_status_menu(self):
     #draw filled bar
     pygame.draw.rect(screen, RED, health_bar_rects[1])
 
+    display_player_stat_text(
+        self, 
+         x= x + SCREEN_WIDTH *0.18,
+         y=y + 60,
+         attribute = self.player.hitpoints,
+         max_attribute = self.player.max_hitpoints
+    )
     
     # stamina status bar
     stamina_bar_rects = draw_status_bar(
@@ -143,6 +158,13 @@ def player_status_menu(self):
          )
     pygame.draw.rect(screen, BLUE, stamina_bar_rects[1])
 
+    display_player_stat_text(
+         self, 
+         x= x + SCREEN_WIDTH *0.18,
+         y=y + 120,
+         attribute = self.player.stamina,
+         max_attribute = self.player.max_stamina
+    )
 
 # speech popup for NPCs
 #def speech_popup(self,screen):

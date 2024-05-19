@@ -15,11 +15,12 @@ from ui_widgets import player_status_menu
 
 class GridGame:
     def __init__(self, grid_width, grid_height, player):
+        self.font = font_normal
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.player = player
         self.enemies = self.generate_enemies(nr_enemies=2)
-        self.player.enemies_encountered = []
+        self.player.encountered_enemies = []
         self.obstacles = self.generate_obstacles(nr_obstacles=10)
         self.biome = 'Forest' # forest by default
         self.exit = self.generate_valid_exit()
@@ -89,11 +90,6 @@ class GridGame:
             exit_image = pygame.image.load("graphics/stairs.png").convert()
             exit_image = pygame.transform.scale(exit_image, (GRID_SIZE, GRID_SIZE))
             screen.blit(exit_image, exit_rect)
-
-
-    # def draw_player_menu(self):
-    #         player_status_menu(self)
-
 
     def draw_player(self, screen):
         grid_offset_x = (SCREEN_WIDTH - self.grid_width * GRID_SIZE) // 2
@@ -200,9 +196,10 @@ class GridGame:
                 enemies_colliding_with_player.append(enemy)     # add colliding enemy to remove list
 
         # count encountered enemies and store 
-        self.player.enemies_encountered = enemies_colliding_with_player
+        self.player.encountered_enemies = enemies_colliding_with_player
         nr_enemies_encountered = len(enemies_colliding_with_player)
         print('colliding with ' + str(nr_enemies_encountered) + ' enemies' )
+        print(enemies_colliding_with_player)
 
         # remove all colliding enemies
         for enemy in enemies_colliding_with_player:
@@ -213,6 +210,6 @@ class GridGame:
     def run(self):
         self.draw_background()
         self.draw_grid(self.screen)
-        player_status_menu(self)
+        player_status_menu(self, self.screen)
         self.draw_enemies(self.screen)
         self.draw_player(self.screen)

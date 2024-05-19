@@ -15,6 +15,11 @@ BLUE = (0, 0, 255)
 BROWN = (139, 69, 19)
 GREEN = (0, 255, 0)
 
+# Font sizes
+font_small = pygame.font.Font(None, 24)
+font_normal = pygame.font.Font(None, 36)
+font_big = pygame.font.Font(None, 60)
+
 # Set up grid parameters
 #tile size
 GRID_SIZE = 50
