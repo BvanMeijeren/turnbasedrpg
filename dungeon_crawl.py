@@ -198,8 +198,8 @@ class GridGame:
         # count encountered enemies and store 
         self.player.encountered_enemies = enemies_colliding_with_player
         nr_enemies_encountered = len(enemies_colliding_with_player)
-        print('colliding with ' + str(nr_enemies_encountered) + ' enemies' )
-        print(enemies_colliding_with_player)
+        # print('colliding with ' + str(nr_enemies_encountered) + ' enemies' )
+        # print(enemies_colliding_with_player)
 
         # remove all colliding enemies
         for enemy in enemies_colliding_with_player:

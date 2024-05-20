@@ -4,8 +4,9 @@ from weapons import *
 
 class Character:
     #stats
-    def __init__(self, x, y, name, level, xp, hitpoints, max_hitpoints, stamina, max_stamina, critical_chance, critical_multiplier, species, 
-                 fire_def, ice_def, electricity_def, skills, items, equipped_weapon, profession, encountered_enemies):
+    def __init__(self, x, y, name, level, xp, hitpoints, max_hitpoints, stamina, max_stamina, critical_chance, 
+                 critical_multiplier, species, physical_def, fire_def, ice_def, electricity_def, 
+                 skills, items, equipped_weapon, profession, encountered_enemies):
         self.x = x
         self.y = y
         self.name = name 
@@ -18,6 +19,7 @@ class Character:
         self.critical_chance = critical_chance # as a proportion
         self.critical_multiplier = critical_multiplier # decimal
         self.species = species
+        self.physical_def = physical_def
         self.fire_def = fire_def # from -1 to 1
         self.ice_def = ice_def # from -1 to 1
         self.electricity_def = electricity_def # from -1 to 1
@@ -65,6 +67,7 @@ Goblin = Character(
     critical_chance=0.05, 
     critical_multiplier=1.5,
     species="Monster", 
+    physical_def=100, 
     fire_def=100,
     ice_def=100,
     electricity_def=100,
@@ -90,6 +93,7 @@ Skeleton = Character(
     critical_chance=0.05, 
     critical_multiplier=1.5,
     species="Undead", 
+    physical_def=100,
     fire_def=100,
     ice_def=100,
     electricity_def=100,

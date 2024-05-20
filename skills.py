@@ -8,18 +8,20 @@ def attack(attacker, defender):
     dmg = calculate_dmg(
         attacker=attacker, 
         defender=defender, 
-        fire_dmg=equipped_weapon.fire_dmg,
-        ice_dmg=equipped_weapon.ice_dmg,
-        electricity_dmg=equipped_weapon.electricity_dmg
+        physical_dmg=attacker.equipped_weapon.physical_dmg,
+        fire_dmg=attacker.equipped_weapon.fire_dmg,
+        ice_dmg=attacker.equipped_weapon.ice_dmg,
+        electricity_dmg=attacker.equipped_weapon.electricity_dmg
         )
-    
-    defender.hitpoints = defender.hitpoints - dmg
+
+    if dmg:
+        defender.hitpoints = defender.hitpoints - dmg
 
 
 # spells
-
 def fireball(attacker, defender):
 
+    physical_dmg=0,
     fire_dmg = 10
     ice_dmg = 0
     electricity_dmg = 0
@@ -27,13 +29,18 @@ def fireball(attacker, defender):
     dmg = calculate_dmg(
         attacker=attacker, 
         defender=defender, 
+        physical_dmg=physical_dmg,
         fire_dmg=fire_dmg,
         ice_dmg=ice_dmg,
         electricity_dmg=electricity_dmg
         )
     
+    if dmg:
+        defender.hitpoints = defender.hitpoints - dmg
+    
 def ice_shard(attacker, defender):
 
+    physical_dmg=0,
     fire_dmg = 0
     ice_dmg = 10
     electricity_dmg = 0
@@ -41,7 +48,14 @@ def ice_shard(attacker, defender):
     dmg = calculate_dmg(
         attacker=attacker, 
         defender=defender, 
+        physical_dmg=physical_dmg,
         fire_dmg=fire_dmg,
         ice_dmg=ice_dmg,
         electricity_dmg=electricity_dmg
         )
+
+    if dmg:
+        defender.hitpoints = defender.hitpoints - dmg
+    
+# list of all spells
+all_spells = [fireball, ice_shard]

@@ -36,7 +36,8 @@ class StartMenu:
             b=51,
             transparency=220,
             width=800,
-            height=500
+            height=500,
+            text = ''
         )
 
         # Intro text

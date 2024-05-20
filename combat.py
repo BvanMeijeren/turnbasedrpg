@@ -5,6 +5,7 @@ from constants import *
 from enemy import *
 from ui_widgets import *
 from backgrounds import choose_combat_background
+from skills import *
 
 class CombatScreen:
     def __init__(self, player):
@@ -27,7 +28,7 @@ class CombatScreen:
 
         enemy_names = ''
         for enemy in self.player.encountered_enemies:
-            enemy_names = enemy_names + 'and a ' + enemy.name
+            enemy_names = enemy_names + enemy.name
 
         enemy_names = enemy_names + '!'
 
@@ -102,8 +103,37 @@ class CombatScreen:
 
     def player_turn(self):
         if self.has_selected_action_type == True and self.has_selected_action == True:
+            # execute player action
+            print('select action type: ' + str(self.selected_action_type) )
+            if self.selected_action_type == 0:
+                attack(self.player, self.player.encountered_enemies[0])
+            elif self.selected_action_type == 1:
+                chosen_spell = all_spells[self.selected_action]
+                if chosen_spell:
+                    chosen_spell(self.player, self.player.encountered_enemies[0])
+                else:
+                    print('Spell not found')
+
+            print('enemy HP remaining: ' + str(self.player.encountered_enemies[0].hitpoints) )
+
+            # reset variable for next player turn
             self.has_selected_action_type = False
             self.has_selected_action = False
+
+            # check if player died:
+            print('player HP is ' + str(self.player.hitpoints) ) 
+            if self.player.hitpoints <= 0:
+                centered_popup(
+                    r = 139,
+                    g = 69,
+                    b = 19,
+                    transparency = 90,
+                    width = 800,
+                    height = 800,
+                    text = 'YOU DIED!'
+                )
+
+            # enemy turn
             self.enemy_turn()
 
     def run(self):

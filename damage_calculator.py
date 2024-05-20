@@ -15,15 +15,16 @@ def critical_multiplier(critical_chance, critical_multiplier):
     return real_critical_multiplier
    
 
-def calculate_dmg(attacker, defender, fire_dmg, ice_dmg, electricity_dmg):
+def calculate_dmg(attacker, defender, physical_dmg, fire_dmg, ice_dmg, electricity_dmg):
 
     # elemental dmg / defence
-    fire_dmg = round(fire_dmg / (defender.fire_def / 10), 0) # if fire_def is 120 and dmg 10, then 10 / 12 =  9 (rounded)
-    ice_dmg = round(ice_dmg / (defender.ice_def / 10), 0)
-    electricity_dmg = round(electricity_dmg / (defender.electricity_def / 10), 0)
+    physical_dmg = round(physical_dmg / (defender.physical_def / 10), 0) * 10
+    fire_dmg = round(fire_dmg / (defender.fire_def / 10), 0) * 10 # if fire_def is 120 and dmg 10, then (10 / 12) *10 =  8 (rounded)
+    ice_dmg = round(ice_dmg / (defender.ice_def / 10), 0) * 10
+    electricity_dmg = round(electricity_dmg / (defender.electricity_def / 10), 0) * 10
 
     # combined dmg with crits
-    combined_dmg = (fire_dmg + ice_dmg + electricity_dmg) * critical_multiplier(attacker.critical_chance, attacker.critical_multiplier)
+    combined_dmg = (physical_dmg + fire_dmg + ice_dmg + electricity_dmg) * critical_multiplier(attacker.critical_chance, attacker.critical_multiplier)
 
     # apply dmg to defender
     defender.hitpoints = defender.hitpoints - combined_dmg

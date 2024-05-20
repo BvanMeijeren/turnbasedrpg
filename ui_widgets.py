@@ -51,12 +51,13 @@ def popup(r,g,b,transparency,width,height,x,y):
     square_position = (x, y)  # Position on the main screen
     screen.blit(transparent_square, square_position)
 
-def centered_popup(r,g,b,transparency,width,height):
+def centered_popup(r,g,b,transparency,width,height, text):
     # examples for parameters
     # color_tuple = (139, 69, 19, 128) for brown or (0, 0, 0, 128) for grey
     # size_tuple = (800,500) for width and height respectively
-
-    square_size = (width, height)
+    
+    x_centered = ( SCREEN_WIDTH - width) // 2
+    y_centered = ( SCREEN_HEIGHT - height) // 2
 
     popup(
         r = r,
@@ -65,9 +66,16 @@ def centered_popup(r,g,b,transparency,width,height):
         transparency = transparency,
         width = width,
         height = height,
-        x = ( SCREEN_WIDTH - square_size[0]) //2,
-        y = ( SCREEN_HEIGHT - square_size[1]) //2
+        x = x_centered,
+        y = y_centered
     )
+
+    # draw text
+    if text:
+        text = font_normal.render( text, True, WHITE)
+        text_rect = text.get_rect(center=( x_centered, y_centered ) )
+        screen.blit(text, text_rect)
+
 
 # player menu
 def draw_status_bar(self, x, y, attribute, max_attribute):

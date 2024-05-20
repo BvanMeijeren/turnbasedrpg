@@ -27,6 +27,7 @@ class GameManager:
                                 critical_chance=0.05, 
                                 critical_multiplier=1.5,
                                 species="Human", 
+                                physical_def=100,
                                 fire_def=100,
                                 ice_def=100,
                                 electricity_def=100,
